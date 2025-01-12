@@ -1,0 +1,40 @@
+voici ma fonction :   const handleSubmit = () => {
+    if (!carType || !serviceType) {
+      Alert.alert(
+        "Erreur",
+        "Veuillez sélectionner le type de voiture et le service."
+      );
+      return;
+    }
+
+    const serviceMessage =
+      serviceType === "location" ? `${hours} heures` : "1 service";
+    Alert.alert(
+      "Réservation confirmée",
+      `custoner: ${user.id}\nType de voiture: ${carType}\nService: ${serviceType}\nDurée: ${serviceMessage}\nPrix total: $${totalPrice} lat: ${selectedLocation.latitude}\nlon ${selectedLocation.longitude}`
+    );
+    setShowModal(false); // Ferme le modal
+  };
+
+le champ dans ma table oders :``
+
+user_id
+car_type
+service_type
+hours
+price
+lat
+lon
+
+complet mon code php pour que le requette puisse cree un new oders
+<?php
+require_once "config.php";
+require_once 'helpers.php';
+
+
+
+function add_oder($data) {
+
+
+
+}

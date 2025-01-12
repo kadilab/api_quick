@@ -1,0 +1,83 @@
+<?php
+require_once 'helpers.php';
+
+// Route mapping
+$routes = [
+    'login' => './routes/auth.php',
+    'signup' => './routes/auth.php',
+    'add_order' => './routes/orders.php',
+    'get_user_orders' => './routes/orders.php',
+    'get_driver_orders' => './routes/orders.php',
+    'update_profile' => './routes/users.php', // Ajout de la route pour modifier le profil
+    'get_tarif' => './routes/tarifs.php', // Ajout de la route pour modifier le profil
+    'get_notif' => './routes/notif.php', // Ajout de la route pour modifier le profil
+    'accept_ride' => './routes/notif.php', // Ajout de la route pour modifier le profil
+];
+
+// Parse the request
+$route = isset($_GET['route']) ? $_GET['route'] : null;
+
+if (!$route || !isset($routes[$route])) {
+    sendResponse(404, ["error" => "Endpoint not found."]);
+}
+
+// Include the appropriate route file
+require_once $routes[$route];
+
+// Call the appropriate function based on the route
+switch ($route) {
+    case 'login':
+        $data = getJsonInput();
+        login($data);
+        break;
+
+    case 'signup':
+        $data = getJsonInput();
+        signup($data);
+        break;
+
+    case 'add_order':
+        $data = getJsonInput();
+        add_order($data);
+        break;
+
+    case 'get_user_orders':
+        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
+        if (!$user_id) {
+            sendResponse(400, ["error" => "User ID is required"]);
+        }
+        get_user_orders($user_id);
+        break;
+    case 'get_driver_orders':
+        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
+        if (!$user_id) {
+            sendResponse(400, ["error" => "User ID is required"]);
+        }
+        get_driver_orders($user_id);
+        break;
+
+    case 'update_profile':
+        $data = getJsonInput();
+        update_profile($data);
+        break;
+    case "get_tarif":
+        get_tarifs();
+        break;
+    case "get_notif":
+        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
+        get_notif($user_id);
+        break;
+    case "accept_ride":
+        // $notif_id = isset($_POST['id_notif']) ? intval($_POST['id_notif']) : null;
+        // $order_id = isset($_POST['id_order']) ? intval($_POST['id_order']) : null;
+        // $driver_id = isset($_POST['id_user']) ? intval($_POST['id_user']) : null;
+
+        $data = getJsonInput();
+
+        accept_ride($data);
+        break;
+    default:
+        sendResponse(404, ["error" => "Route not handled."]);
+        break;
+}
+?>
