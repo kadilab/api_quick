@@ -79,10 +79,10 @@ switch ($route) {
             update_status($data);
             break;
     case "accept_ride":
-       
+    
         $data = getJsonInput();
-
-        accept_ride($data);
+        var_dump($data);
+        // accept_ride($data);
         break;
     default:
         sendResponse(404, ["error" => "Route not handled."]);
