@@ -81,8 +81,8 @@ switch ($route) {
     case "accept_ride":
     
         $data = getJsonInput();
-        var_dump($data);
-        // accept_ride($data);
+        // var_dump($data);
+        accept_ride($data);
         break;
     default:
         sendResponse(404, ["error" => "Route not handled."]);
