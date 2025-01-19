@@ -68,12 +68,6 @@ function accept_ride($data)
     $id_driver = $data['id_user'];
     $id_notif = $data['id_notif'];
     $id_order = $data['id_order'];
-
-  
-
-    var_dump($data);
-    die();
-
     
 
     try {
