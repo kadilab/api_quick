@@ -12,6 +12,7 @@ $routes = [
     'get_tarif' => './routes/tarifs.php', // Ajout de la route pour modifier le profil
     'get_notif' => './routes/notif.php', // Ajout de la route pour modifier le profil
     'accept_ride' => './routes/notif.php', // Ajout de la route pour modifier le profil
+    'cancel_ride' => './routes/notif.php', // Ajout de la route pour modifier le profil
     'update_location' => './routes/location.php', // Ajout de la route pour modifier le profil
     'update_status' => './routes/location.php', // Ajout de la route pour modifier le profil
 ];
@@ -83,6 +84,12 @@ switch ($route) {
         $data = getJsonInput();
         // var_dump($data);
         accept_ride($data);
+        break;
+    case "cancel_ride":
+    
+        $data = getJsonInput();
+        // var_dump($data);
+        cancel_ride($data);
         break;
     default:
         sendResponse(404, ["error" => "Route not handled."]);

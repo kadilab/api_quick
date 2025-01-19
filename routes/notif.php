@@ -61,7 +61,7 @@ function accept_ride($data)
         return;
     }
     if (!isset($data['id_user']) || !is_numeric($data['id_user'])) {
-        sendResponse(400, ["error" => "Invalid or missing id_driver."]);
+        sendResponse(400, ["error" => "Invalid or missing id_user."]);
         return;
     }
 
@@ -102,6 +102,59 @@ function accept_ride($data)
 
         // ✅ Réponse en cas de succès
         sendResponse(200, ["message" => "Ride accepted successfully."]);
+    } catch (PDOException $e) {
+        // 🚨 Annuler la transaction en cas d'erreur
+        $pdo->rollBack();
+        sendResponse(500, ["error" => "Database error: " . $e->getMessage()]);
+    }
+}
+
+
+function cancel_ride($data)
+{
+    // 🛡️ Valider les paramètres
+    if (!isset($data['id_notif']) || !is_numeric($data['id_notif'])) {
+        sendResponse(400, ["error" => "Invalid or missing id_notif."]);
+        return;
+    }
+    if (!isset($data['id_order']) || !is_numeric($data['id_order'])) {
+        sendResponse(400, ["error" => "Invalid or missing id_order."]);
+        return;
+    }
+
+    $id_notif = $data['id_notif'];
+    $id_order = $data['id_order'];
+
+    try {
+        // ✅ Connexion à la base de données
+        $pdo = new PDO(DB_DSN, DB_USER, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // ✅ Commencer une transaction
+        $pdo->beginTransaction();
+
+        // 📝 1. Supprimer la notification associée
+        $stmtDeleteNotif = $pdo->prepare("
+            DELETE FROM notification 
+            WHERE id_notif = :id_notif
+        ");
+        $stmtDeleteNotif->bindParam(":id_notif", $id_notif, PDO::PARAM_INT);
+        $stmtDeleteNotif->execute();
+
+        // 📝 2. Mettre à jour le statut de la commande
+        $stmtUpdateOrder = $pdo->prepare("
+            UPDATE orders 
+            SET status = 'canceled', driver = NULL 
+            WHERE id = :id_order
+        ");
+        $stmtUpdateOrder->bindParam(":id_order", $id_order, PDO::PARAM_INT);
+        $stmtUpdateOrder->execute();
+
+        // ✅ Valider la transaction
+        $pdo->commit();
+
+        // ✅ Réponse en cas de succès
+        sendResponse(200, ["message" => "Order canceled successfully."]);
     } catch (PDOException $e) {
         // 🚨 Annuler la transaction en cas d'erreur
         $pdo->rollBack();
