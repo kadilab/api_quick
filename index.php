@@ -12,6 +12,8 @@ $routes = [
     'get_tarif' => './routes/tarifs.php', // Ajout de la route pour modifier le profil
     'get_notif' => './routes/notif.php', // Ajout de la route pour modifier le profil
     'accept_ride' => './routes/notif.php', // Ajout de la route pour modifier le profil
+    'update_location' => './routes/location.php', // Ajout de la route pour modifier le profil
+    'update_status' => './routes/location.php', // Ajout de la route pour modifier le profil
 ];
 
 // Parse the request
@@ -67,11 +69,17 @@ switch ($route) {
         $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
         get_notif($user_id);
         break;
+    case "update_location":
+        $data = getJsonInput();
+        var_dump($data);
+        update_location($data);
+        break;
+    case "update_status":
+        $data = getJsonInput();
+            update_status($data);
+            break;
     case "accept_ride":
-        // $notif_id = isset($_POST['id_notif']) ? intval($_POST['id_notif']) : null;
-        // $order_id = isset($_POST['id_order']) ? intval($_POST['id_order']) : null;
-        // $driver_id = isset($_POST['id_user']) ? intval($_POST['id_user']) : null;
-
+       
         $data = getJsonInput();
 
         accept_ride($data);

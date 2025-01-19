@@ -50,8 +50,6 @@ function get_notif($user_id)
 
 function accept_ride($data)
 
-
-
 {
     // 🛡️ Valider les paramètres
     if (!isset($data['id_notif']) || !is_numeric($data['id_notif'])) {
@@ -93,7 +91,7 @@ function accept_ride($data)
         // 📝 2. Mettre à jour le statut de la commande
         $stmtOrder = $pdo->prepare("
             UPDATE orders 
-            SET status = 'pending', driver = :id_driver 
+            SET status = 'confirmed', driver = :id_driver 
             WHERE id = :id_order
         ");
         $stmtOrder->bindParam(":id_order", $id_order, PDO::PARAM_INT);

@@ -33,7 +33,7 @@ function login($data) {
                 ]
             ]);
         } else {
-            sendResponse(200, ["message" => "error",
+            sendResponse(200, ["message" => "Echec de connexion",
             "user" =>[]
         ]);
         }

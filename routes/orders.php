@@ -77,7 +77,7 @@ function get_user_orders($user_id)
 
         // Fetch orders for the given user ID
         $stmt = $pdo->prepare("
-            SELECT id, car_type, service_type, hours, price, lat, lon, status, created_at 
+            SELECT *
             FROM orders 
             WHERE user_id = :user_id
             ORDER BY created_at DESC
