@@ -69,6 +69,8 @@ function accept_ride($data)
     $id_notif = $data['id_notif'];
     $id_order = $data['id_order'];
 
+    var_dump($data);
+
     
 
     try {
