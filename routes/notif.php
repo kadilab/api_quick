@@ -144,7 +144,7 @@ function cancel_ride($data)
         // 📝 2. Mettre à jour le statut de la commande
         $stmtUpdateOrder = $pdo->prepare("
             UPDATE orders 
-            SET status = 'canceled', driver = NULL 
+            SET status = 'cancelled', driver = NULL 
             WHERE id = :id_order
         ");
         $stmtUpdateOrder->bindParam(":id_order", $id_order, PDO::PARAM_INT);
