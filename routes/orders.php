@@ -227,12 +227,21 @@ function today_trip($driver, $status) {
         // Connexion à la base de données
         $pdo = new PDO(DB_DSN, DB_USER, DB_PASSWORD);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        $sql = "
+            SELECT SUM(price) AS somme 
+            FROM u318332214_quick.orders 
+            WHERE driver = :driver AND status = :status
+        ";
 
+        sendResponse(200, ["sql" =>  $sql]);
+
+        die();
         // Préparation de la requête SQL
         $stmt = $pdo->prepare("
             SELECT SUM(price) AS somme 
             FROM u318332214_quick.orders 
-            WHERE u318332214_quick.orders.driver = :driver AND u318332214_quick.orders.status = `confirmed`
+            WHERE driver = :driver AND status = :status
         ");
 
         // Liaison des paramètres
