@@ -248,7 +248,7 @@ function today_trip($driver, $status) {
             if ($result && isset($result['somme'])) {
                 sendResponse(200, ["somme" => $result['somme']]);
             } else {
-                sendResponse(200, ["somme" => $result['somme']]);
+                sendResponse(200, ["somme" => 0]);
             }
         } else {
             sendResponse(500, ["error" => "Erreur lors de l'exécution de la requête."]);

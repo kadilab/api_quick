@@ -99,6 +99,7 @@ switch ($route) {
         if (!$user_id ) {
                 sendResponse(400, ["error" => "User ID is required and status"]);
         }
+       
         today_trip($user_id,$status);
         break;
     default:
