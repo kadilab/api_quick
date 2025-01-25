@@ -227,29 +227,41 @@ function today_trip($driver, $status) {
         // Connexion à la base de données
         $pdo = new PDO(DB_DSN, DB_USER, DB_PASSWORD);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-        // $sql = "SELECT SUM(price) AS somme FROM u318332214_quick.orders WHERE driver = `$driver` AND status = `$status`";
 
-        // sendResponse(200, ["sql" =>  $sql]);
+        // Obtenir la date d'aujourd'hui
+        $today = date('Y-m-d');
 
-        // die();
         // Préparation de la requête SQL
-        $stmt = $pdo->prepare("SELECT SUM(price) AS somme FROM u318332214_quick.orders WHERE driver = :driver AND status = :status");
+        $stmt = $pdo->prepare("
+            SELECT 
+                SUM(price) AS somme, 
+                COUNT(*) AS total_orders 
+            FROM 
+                u318332214_quick.orders 
+            WHERE 
+                driver = :driver 
+                AND status = :status
+                AND DATE(created_at) = :created_at
+        ");
 
         // Liaison des paramètres
         $stmt->bindParam(":driver", $driver, PDO::PARAM_INT);
         $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+        $stmt->bindParam(":created_at", $today, PDO::PARAM_STR);
 
         // Exécuter la requête
         if ($stmt->execute()) {
             // Récupération du résultat
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Vérification si une somme a été calculée
-            if ($result && isset($result['somme'])) {
-                sendResponse(200, ["somme" => $result['somme']]);
+            // Vérification si une somme a été calculée et envoi de la réponse
+            if ($result) {
+                sendResponse(200, [
+                    "somme" => $result['somme'] ?? 0, 
+                    "total_orders" => $result['total_orders'] ?? 0
+                ]);
             } else {
-                sendResponse(200, ["somme" => 0]);
+                sendResponse(200, ["somme" => 0, "total_orders" => 0]);
             }
         } else {
             sendResponse(500, ["error" => "Erreur lors de l'exécution de la requête."]);
