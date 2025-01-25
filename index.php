@@ -93,7 +93,7 @@ switch ($route) {
         break;
     case 'today_trip':
         $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
-        $status= isset($_GET['status']);
+        $status= $_GET['status'];
          
         if (!$user_id ) {
                 sendResponse(400, ["error" => "User ID is required and status"]);
