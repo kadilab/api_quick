@@ -98,8 +98,8 @@ switch ($route) {
         if (!$user_id ) {
                 sendResponse(400, ["error" => "User ID is required and status"]);
         }
-        sendResponse(200,$_GET);
-        // today_trip($user_id,$status);
+        // sendResponse(200,$_GET);
+        today_trip($user_id,$status);
         break;
     default:
         sendResponse(404, ["error" => "Route not handled."]);

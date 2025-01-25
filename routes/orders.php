@@ -232,7 +232,7 @@ function today_trip($driver, $status) {
         $stmt = $pdo->prepare("
             SELECT SUM(price) AS somme 
             FROM u318332214_quick.orders 
-            WHERE driver = :driver AND status = :status
+            WHERE u318332214_quick.orders.driver = :driver AND u318332214_quick.orders.status = `confirmed`
         ");
 
         // Liaison des paramètres
