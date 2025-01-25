@@ -222,3 +222,38 @@ function add_notif($driver_id, $order_id)
     }
 }
 
+function today_trip($driver, $status) {
+    try {
+        // Connexion à la base de données
+        $pdo = new PDO(DB_DSN, DB_USER, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Préparation de la requête SQL
+        $stmt = $pdo->prepare("
+            SELECT SUM(price) AS somme 
+            FROM u318332214_quick.orders 
+            WHERE driver = :driver AND status = :status
+        ");
+
+        // Liaison des paramètres
+        $stmt->bindParam(":driver", $driver, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_STR);
+
+        // Exécuter la requête
+        if ($stmt->execute()) {
+            // Récupération du résultat
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Vérification si une somme a été calculée
+            if ($result && isset($result['somme'])) {
+                sendResponse(200, ["somme" => $result['somme']]);
+            } else {
+                sendResponse(200, ["somme" => $result['somme']]);
+            }
+        } else {
+            sendResponse(500, ["error" => "Erreur lors de l'exécution de la requête."]);
+        }
+    } catch (PDOException $e) {
+        sendResponse(500, ["error" => "Erreur de base de données : " . $e->getMessage()]);
+    }
+}

@@ -140,7 +140,6 @@ function cancel_ride($data)
         ");
         $stmtDeleteNotif->bindParam(":id_notif", $id_notif, PDO::PARAM_INT);
         $stmtDeleteNotif->execute();
-
         // 📝 2. Mettre à jour le statut de la commande
         $stmtUpdateOrder = $pdo->prepare("
             UPDATE orders 

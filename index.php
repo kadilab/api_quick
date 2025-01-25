@@ -15,6 +15,7 @@ $routes = [
     'cancel_ride' => './routes/notif.php', // Ajout de la route pour modifier le profil
     'update_location' => './routes/location.php', // Ajout de la route pour modifier le profil
     'update_status' => './routes/location.php', // Ajout de la route pour modifier le profil
+    'today_trip' => './routes/orders.php', // Ajout de la route pour modifier le profil
 ];
 
 // Parse the request
@@ -90,6 +91,15 @@ switch ($route) {
         $data = getJsonInput();
         // var_dump($data);
         cancel_ride($data);
+        break;
+    case 'today_trip':
+        $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
+        $status= isset($_GET['status']);
+
+        if (!$user_id ) {
+                sendResponse(400, ["error" => "User ID is required and status"]);
+        }
+        today_trip($user_id,$status);
         break;
     default:
         sendResponse(404, ["error" => "Route not handled."]);
