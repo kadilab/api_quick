@@ -73,7 +73,6 @@ switch ($route) {
         break;
     case "update_location":
         $data = getJsonInput();
-        var_dump($data);
         update_location($data);
         break;
     case "update_status":
@@ -95,12 +94,12 @@ switch ($route) {
     case 'today_trip':
         $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
         $status= isset($_GET['status']);
-
+         
         if (!$user_id ) {
                 sendResponse(400, ["error" => "User ID is required and status"]);
         }
-       
-        today_trip($user_id,$status);
+        sendResponse(200,$_GET);
+        // today_trip($user_id,$status);
         break;
     default:
         sendResponse(404, ["error" => "Route not handled."]);
