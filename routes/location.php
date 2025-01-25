@@ -82,3 +82,33 @@ function update_status($data)
         sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
     }
 }
+
+function get_driver_status($data)
+{
+    try {
+        $pdo = new PDO(DB_DSN, DB_USER, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        if (!isset($data['user_id'])) {
+            sendResponse(400, ["message" => "Missing required field: user_id."]);
+            return;
+        }
+
+        $user_id = $data['user_id'];
+
+        // Récupérer le statut du chauffeur
+        $stmt = $pdo->prepare("SELECT driver_active_status FROM users WHERE id_user = :user_id");
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($result) {
+            sendResponse(200, ["status" => $result['driver_active_status']]);
+        } else {
+            sendResponse(404, ["message" => "Driver not found."]);
+        }
+    } catch (PDOException $e) {
+        sendResponse(500, ["message" => "Database error: " . $e->getMessage()]);
+    }
+}
