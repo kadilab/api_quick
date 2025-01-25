@@ -90,7 +90,7 @@ function get_driver_status($data)
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         if (!isset($data['user_id'])) {
-            sendResponse(400, ["message" => "Missing required field: user_id."]);
+            sendResponse(400, ["message" => $data]);
             return;
         }
 
