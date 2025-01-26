@@ -92,13 +92,13 @@ switch ($route) {
         // var_dump($data);
         accept_ride($data);
         break;
-    case "start_ride":
+    case "start_trip":
     
         $data = getJsonInput();
         // var_dump($data);
         accept_ride($data);
         break;
-    case "end_ride":
+    case "end_trip":
     
         $data = getJsonInput();
         // var_dump($data);
