@@ -108,6 +108,78 @@ function accept_ride($data)
         sendResponse(500, ["error" => "Database error: " . $e->getMessage()]);
     }
 }
+function start_trip($data)
+{
+    if (!isset($data['id_order']) || !is_numeric($data['id_order'])) {
+        sendResponse(400, ["error" => "Invalid or missing id_order."]);
+        return;
+    }
+    $id_order = $data['id_order'];
+
+    try {
+        // Connexion à la base de données
+        $pdo = new PDO(DB_DSN, DB_USER, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Commencer une transaction
+        $pdo->beginTransaction();
+        // Mettre à jour le statut de la commande et enregistrer l'heure de début
+        $stmtOrder = $pdo->prepare("
+            UPDATE orders 
+            SET start_time = NOW(), status = 'in_progress'
+            WHERE id = :id_order
+        ");
+        $stmtOrder->bindParam(":id_order", $id_order, PDO::PARAM_INT);
+        $stmtOrder->execute();
+
+        // Valider la transaction
+        $pdo->commit();
+
+        // Réponse en cas de succès
+        sendResponse(200, ["message" => "Ride started successfully."]);
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        sendResponse(500, ["error" => "Database error: " . $e->getMessage()]);
+    }
+}
+
+function end_trip($data)
+{
+    if (!isset($data['id_order']) || !is_numeric($data['id_order'])) {
+        sendResponse(400, ["error" => "Invalid or missing id_order."]);
+        return;
+    }
+
+    $id_order = $data['id_order'];
+
+    try {
+        // Connexion à la base de données
+        $pdo = new PDO(DB_DSN, DB_USER, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Commencer une transaction
+        $pdo->beginTransaction();
+
+        // Mettre à jour l'heure de fin et le statut de la commande
+        $stmtOrder = $pdo->prepare("
+            UPDATE orders 
+            SET end_time = NOW(), status = 'completed'
+            WHERE id = :id_order
+        ");
+        $stmtOrder->bindParam(":id_order", $id_order, PDO::PARAM_INT);
+        $stmtOrder->execute();
+
+        // Valider la transaction
+        $pdo->commit();
+
+        // Réponse en cas de succès
+        sendResponse(200, ["message" => "Ride ended successfully."]);
+    } catch (PDOException $e) {
+        $pdo->rollBack();
+        sendResponse(500, ["error" => "Database error: " . $e->getMessage()]);
+    }
+}
+
 
 
 function cancel_ride($data)

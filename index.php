@@ -17,6 +17,8 @@ $routes = [
     'update_status' => './routes/location.php', // Ajout de la route pour modifier le profil
     'get_status' => './routes/location.php', // Ajout de la route pour modifier le profil
     'today_trip' => './routes/orders.php', // Ajout de la route pour modifier le profil
+    'start_trip' => './routes/notif.php', // Ajout de la route pour modifier le profil
+    'end_trip' => './routes/notif.php', // Ajout de la route pour modifier le profil
 ];
 
 // Parse the request
@@ -85,6 +87,18 @@ switch ($route) {
         get_driver_status($data);
         break;
     case "accept_ride":
+    
+        $data = getJsonInput();
+        // var_dump($data);
+        accept_ride($data);
+        break;
+    case "start_ride":
+    
+        $data = getJsonInput();
+        // var_dump($data);
+        accept_ride($data);
+        break;
+    case "end_ride":
     
         $data = getJsonInput();
         // var_dump($data);
