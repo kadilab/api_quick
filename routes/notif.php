@@ -23,7 +23,7 @@ function get_notif($user_id)
 
         // ✅ Requête SQL pour récupérer les notifications
         $stmt = $pdo->prepare("
-            SELECT *
+            SELECT DISTINCT *
             FROM notification 
             INNER JOIN orders ON notification.order_id = orders.id
             WHERE notification.driver = :user_id 
