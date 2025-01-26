@@ -29,6 +29,8 @@ function login($data) {
                     "lastname" => $user['lastname'],
                     "email" => $email,
                     "role" => $user['user_role'],
+                    "mobile" => $user['mobile'],
+                    "profile_image" => $user['profile_image'],
                     "account_approved" => $user['account_approved']
                 ]
             ]);
