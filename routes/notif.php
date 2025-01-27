@@ -24,12 +24,14 @@ function get_notif($user_id)
         // ✅ Requête SQL pour récupérer les notifications
         $stmt = $pdo->prepare("
             SELECT DISTINCT *
-            FROM notification 
+            FROM notification
             INNER JOIN orders ON notification.order_id = orders.id
+            INNER JOIN user ON orders.user_id = user.id_user
             WHERE notification.driver = :user_id 
             AND notification.etat = 0
             ORDER BY notification.created_at DESC
         ");
+        
 
         $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
         $stmt->execute();
