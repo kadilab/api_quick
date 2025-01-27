@@ -28,13 +28,18 @@ function get_notif($user_id)
             INNER JOIN orders ON notification.order_id = orders.id
             INNER JOIN users ON orders.user_id = users.id_user
             WHERE notification.driver = :user_id 
-            AND notification.etat = 0 AND users.driver_active_status =`Free`
+            AND notification.etat = 0 
+            AND users.driver_active_status = :status
             ORDER BY notification.created_at DESC
-        ");
-        
+            ");
+
+        $status = "Free"; // Déclaration correcte de la variable
 
         $stmt->bindParam(":user_id", $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(":status", $status, PDO::PARAM_STR); // Utilisation correcte de bindParam
+
         $stmt->execute();
+
 
         // ✅ Récupérer les résultats
         $notifications = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -42,7 +47,8 @@ function get_notif($user_id)
         if ($notifications) {
             sendResponse(200, ["notifications" => $notifications]);
         } else {
-            sendResponse(200, ["notifications" => $notifications]);        }
+            sendResponse(200, ["notifications" => $notifications]);
+        }
     } catch (PDOException $e) {
         // 🚨 Gestion des erreurs PDO
         sendResponse(500, ["error" => "Database error: " . $e->getMessage()]);
@@ -50,7 +56,6 @@ function get_notif($user_id)
 }
 
 function accept_ride($data)
-
 {
     // 🛡️ Valider les paramètres
     if (!isset($data['id_notif']) || !is_numeric($data['id_notif'])) {
@@ -69,7 +74,7 @@ function accept_ride($data)
     $id_driver = $data['id_user'];
     $id_notif = $data['id_notif'];
     $id_order = $data['id_order'];
-    
+
 
     try {
         // ✅ Connexion à la base de données
