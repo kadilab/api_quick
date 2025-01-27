@@ -28,7 +28,7 @@ function get_notif($user_id)
             INNER JOIN orders ON notification.order_id = orders.id
             INNER JOIN users ON orders.user_id = users.id_user
             WHERE notification.driver = :user_id 
-            AND notification.etat = 0
+            AND notification.etat = 0 AND users.driver_active_status =`Free`
             ORDER BY notification.created_at DESC
         ");
         
@@ -48,7 +48,6 @@ function get_notif($user_id)
         sendResponse(500, ["error" => "Database error: " . $e->getMessage()]);
     }
 }
-
 
 function accept_ride($data)
 
