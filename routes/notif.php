@@ -26,7 +26,7 @@ function get_notif($user_id)
             SELECT DISTINCT *
             FROM notification
             INNER JOIN orders ON notification.order_id = orders.id
-            INNER JOIN user ON orders.user_id = user.id_user
+            INNER JOIN users ON orders.user_id = users.id_user
             WHERE notification.driver = :user_id 
             AND notification.etat = 0
             ORDER BY notification.created_at DESC
