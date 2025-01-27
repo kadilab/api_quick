@@ -99,6 +99,12 @@ function accept_ride($data)
         $stmtOrder->bindParam(":id_driver", $id_driver, PDO::PARAM_INT);
         $stmtOrder->execute();
 
+        $stmtOrder = $pdo->prepare("
+           UPDATE `users` SET `driver_active_status` = 'Busy' WHERE `users`.`id_user` = :id_driver;
+        ");
+        $stmtOrder->bindParam(":id_driver", $id_driver, PDO::PARAM_INT);
+        $stmtOrder->execute();
+
         // ✅ Valider la transaction
         $pdo->commit();
 
@@ -170,6 +176,7 @@ function end_trip($data)
         ");
         $stmtOrder->bindParam(":id_order", $id_order, PDO::PARAM_INT);
         $stmtOrder->execute();
+
 
         // Valider la transaction
         $pdo->commit();
